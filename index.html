@@ -41,7 +41,7 @@
     <div class="form-grid">
       <div>
         <label>担当店舗*</label><select name="shop" id="shopSelect" required onchange="v()"><option value="">選択</option><option value="車検課">車検課</option><option value="板橋ss">板橋ss</option><option value="志村ss">志村ss</option><option value="小茂根ss">小茂根ss</option><option value="赤羽西ss">赤羽西ss</option><option value="東坂下ss">東坂下ss</option><option value="高島平ss">高島平ss</option><option value="武蔵関ss">武蔵関ss</option></select>
-        <label>第一希望日（通検/作業）*</label><input type="text" name="date1" id="d1" required readonly>
+        <label>通検予定日*</label><input type="text" name="date1" id="d1" required readonly>
         <label>第二希望日</label><input type="text" name="date2" id="d2" readonly>
       </div>
       <div>
@@ -59,7 +59,7 @@
     <button type="submit" class="submit-btn" id="s-btn" disabled>入力してください</button>
   </form>
 </div>
-<div id="cOverlay" class="modal"><div class="modal-box"><h3>送信内容確認</h3><div id="cContent" style="margin:15px 0;"></div><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"><button onclick="executeSubmit()" style="padding:15px; background:#2563eb; color:white; border:none; border-radius:10px; font-weight:bold;">送信する</button><button onclick="closeConfirm()" style="padding:15px; background:#eee; border:none; border-radius:10px;">戻る</button></div></div></div>
+<div id="cOverlay" class="modal"><div class="modal-box"><h3>送信内容確認</h3><div id="cContent" style="margin:15px 0;"></div><div style="display:grid; grid-template-columns:1fr 1fr; gap:10px;"><button onclick="executeSubmit()" style="padding:15px; background:#2563eb; color:white; border:none; border-radius:10px; font-weight:bold;">送信する</button><button onclick="closeConfirm()" style="padding:15px; background:#eee; border:none; border-radius:10px;">修正</button></div></div></div>
 <script>
   let holidays = []; let fp1, fp2; let type = 'std';
   window.onload = () => { google.script.run.withSuccessHandler(data => { holidays = data; updateCalendar(); v(); }).getHolidays(); };
@@ -86,8 +86,8 @@
   }
   document.getElementById('reqForm').onsubmit = (e) => { e.preventDefault(); 
     const c = document.getElementById('course').value;
-    const msg = c.includes('セーフティー') ? '<br><span style="color:red; font-size:0.8rem;">※前日入庫になります。</span>' : '';
-    document.getElementById('cContent').innerHTML = `<b>顧客:</b> ${document.getElementById('userName').value}様<br><b>希望日:</b> ${document.getElementById('d1').value}${msg}`; 
+    const msg = c.includes('セーフティー') ? '<br><span style="color:red; font-size:0.8rem;">※通検日の前日が「工場入庫日」となります。</span>' : '';
+    document.getElementById('cContent').innerHTML = `<b>顧客:</b> ${document.getElementById('userName').value}様<br><b>通検希望日:</b> ${document.getElementById('d1').value}${msg}`; 
     document.getElementById('cOverlay').style.display='flex'; 
   };
   function closeConfirm() { document.getElementById('cOverlay').style.display='none'; }

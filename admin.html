@@ -31,9 +31,9 @@
     <div class="card" style="border-top-color:#d97706;"><div style="padding:8px; font-weight:bold;">🔧 工場入庫</div><div id="f-list"></div></div>
   </div>
 </div>
-<div id="editModal"><div class="edit-box"><h3>内容修正</h3><input type="hidden" id="e-id"><label>顧客名</label><input type="text" id="e-name" style="width:100%; margin-bottom:10px;"><label>確定日</label><input type="date" id="e-d" style="width:100%; margin-bottom:10px;"><label>車種</label><input type="text" id="e-car" style="width:100%; margin-bottom:10px;"><label>ナンバー</label><input type="text" id="e-num" style="width:100%; margin-bottom:10px;"><label>コース</label><select id="e-c" style="width:100%; margin-bottom:10px;"><option value="スタンダード車検">スタンダード車検</option><option value="セーフティー車検">セーフティー車検</option><option value="一般整備・修理">一般整備・修理</option></select><div style="display:flex; gap:10px; margin-top:15px;"><button onclick="saveEdit()" style="flex:1; padding:10px; background:#059669; color:white; border:none; border-radius:50px;">保存</button><button onclick="closeModal()" style="flex:1; padding:10px; border:none; border-radius:50px;">閉じる</button></div></div></div>
+<div id="editModal"><div class="edit-box"><h3>内容修正</h3><input type="hidden" id="e-id"><label>顧客名</label><input type="text" id="e-name" style="width:100%; margin-bottom:10px;"><label>通検予定日</label><input type="date" id="e-d" style="width:100%; margin-bottom:10px;"><label>車種</label><input type="text" id="e-car" style="width:100%; margin-bottom:10px;"><label>車番</label><input type="text" id="e-num" style="width:100%; margin-bottom:10px;"><label>コース</label><select id="e-c" style="width:100%; margin-bottom:10px;"><option value="スタンダード車検">スタンダード車検</option><option value="セーフティー車検">セーフティー車検</option><option value="一般整備・修理">一般整備・修理</option></select><div style="display:flex; gap:10px; margin-top:15px;"><button onclick="saveEdit()" style="flex:1; padding:10px; background:#059669; color:white; border:none; border-radius:50px;">保存</button><button onclick="closeModal()" style="flex:1; padding:10px; border:none; border-radius:50px;">閉じる</button></div></div></div>
 <script>
-  let all = []; const labels = ["受付表", "車検証", "自賠責", "任意保険"];
+  let all = []; const labels = ["受付表", "車検証", "自賠責", "保険証"];
   function getBadge(c) { let cls = c.includes('スタンダード')?'bg-std':(c.includes('セーフティー')?'bg-saf':'bg-gen'); return `<span class="badge ${cls}">${c}</span>`; }
   function getDocs(urls) { if (!urls) return ''; const list = urls.split('\n'); let h = ''; list.forEach((url, i) => { if (url && url.startsWith('http')) h += `<a href="${url}" target="_blank" class="doc-btn">📄${labels[i]}</a>`; }); return h; }
   function load() {
@@ -46,10 +46,10 @@
     }).getAdminData();
   }
   function conf(id, d) { if(confirm(d + " で確定しますか？")) google.script.run.withSuccessHandler(load).finalizeRequest(id, d); }
-  function delReq(id) { if(confirm("削除しますか？")) google.script.run.withSuccessHandler(load).deleteRequest(id); }
+  function delReq(id) { if(confirm("完全に削除しますか？")) google.script.run.withSuccessHandler(load).deleteRequest(id); }
   function openEdit(id) { const d = all.find(x => String(x.id) === String(id)); document.getElementById('e-id').value = d.id; document.getElementById('e-name').value = d.name; document.getElementById('e-d').value = d.rawDate1; document.getElementById('e-c').value = d.course; document.getElementById('e-car').value = d.car; document.getElementById('e-num').value = d.num; document.getElementById('editModal').style.display = 'flex'; }
   function closeModal() { document.getElementById('editModal').style.display = 'none'; }
-  function saveEdit() { const o = { id: document.getElementById('e-id').value, name: document.getElementById('e-name').value, date: document.getElementById('e-d').value, course: document.getElementById('e-c').value, car: document.getElementById('e-car').value, num: document.getElementById('e-num').value, shop: all.find(x=>x.id==document.getElementById('e-id').value).shop }; google.script.run.withSuccessHandler(() => { alert("更新完了！店舗へメールしました。"); closeModal(); load(); }).updateRequestData(o); }
+  function saveEdit() { const o = { id: document.getElementById('e-id').value, name: document.getElementById('e-name').value, date: document.getElementById('e-d').value, course: document.getElementById('e-c').value, car: document.getElementById('e-car').value, num: document.getElementById('e-num').value, shop: all.find(x=>x.id==document.getElementById('e-id').value).shop }; google.script.run.withSuccessHandler(() => { alert("更新完了！店舗へ通知しました。"); closeModal(); load(); }).updateRequestData(o); }
   window.onload = load;
 </script>
 </body>

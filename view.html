@@ -26,8 +26,8 @@
       res.pending.forEach(d => { h += `<div class="card"><b>${d.name}様</b> ${getBadge(d.course)}<br><small>${d.car} (${d.num})</small><div class="choice-container"><div class="choice-item c1">第1: ${d.date1}</div><div class="choice-item c2">第2: ${d.date2||'なし'}</div></div></div>`; });
       h += '<br><b>✅ 確定済み</b>';
       res.confirmed.forEach(d => { 
-        const isG = d.course.includes('一般');
-        h += `<div class="card confirmed"><b>${d.name}様</b> ${getBadge(d.course)}<br><small>${d.car}</small><div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-top:8px; background:#f8fafc; padding:8px; border-radius:8px;"><div>通検/作業日<br><b style="color:#2563eb;">${d.confirmedDate}</b></div><div>車両入庫日<br><b style="color:#d97706;">${isG?'当日':d.entryDate}</b></div></div></div>`; 
+        const isG = d.course.indexOf('一般') !== -1;
+        h += `<div class="card confirmed"><b>${d.name}様</b> ${getBadge(d.course)}<br><small>${d.car}</small><div style="display:grid; grid-template-columns:1fr 1fr; gap:5px; margin-top:8px; background:#f8fafc; padding:8px; border-radius:8px;"><div>通検予定日<br><b style="color:#2563eb;">${d.confirmedDate}</b></div><div>工場入庫日<br><b style="color:#d97706;">${isG?'当日':d.entryDate}</b></div></div></div>`; 
       });
       document.getElementById('content').innerHTML = h;
     }).getShopStatusData(s);
